@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="old_vector_n.hpp" />
+    <ClInclude Include="TestVector.hpp" />
     <ClInclude Include="vector_n.h" />
   </ItemGroup>
   <ItemGroup>
