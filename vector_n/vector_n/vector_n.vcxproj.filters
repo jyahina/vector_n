@@ -21,10 +21,13 @@
     <ClInclude Include="old_vector_n.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestVector.hpp">
+    <ClInclude Include="profile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="profile.h">
+    <ClInclude Include="standart_deque_n.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="standart_vector_n.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

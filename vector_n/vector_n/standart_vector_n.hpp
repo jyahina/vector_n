@@ -53,13 +53,13 @@ template <typename T, size_t N>
 using vec_n_type = decltype(HelperVector::get_n_vector<T, N>(N));
 
 template<typename ElementType, size_t numDims>
-class TestVector
+class standart_vector_n
 {
 public:
-	TestVector() {}
+	standart_vector_n() {}
 
 	template<typename ... Sizes>
-	TestVector(Sizes ... sizesDims)
+	standart_vector_n(Sizes ... sizesDims)
 	{
 		sizes = { size_t(sizesDims)... };
 		data = HelperVector::make_vector<ElementType>(sizesDims ...);
@@ -72,22 +72,23 @@ public:
 		data = HelperVector::make_vector<ElementType>(sizesDims ...);
 	}
 
+	template<typename ... Sizes>
 	inline void resize(const vec_n_size<numDims> &sizesDims)
 	{
 		sizes = sizesDims;
-		data = HelperVector::make_vector(std::get<numDims>(std::forward<std::array>(sizesDims))...);
+		data = HelperVector::make_vector<ElementType>(std::get<Sizes>(std::forward<std::array>(sizesDims))...);
 	}
 
 	template<typename ... Indexes>
 	inline ElementType& operator()(Indexes ... indexes)
 	{
-		return getData(indexes...);
+		return getData(data, indexes...);
 	}
 
 	template<typename ... Indexes>
 	inline const ElementType& operator()(Indexes ... indexes) const
 	{
-		return getData(indexes...);
+		return getData(data, indexes...);
 	}
 
 	template<typename ... Indexes>
@@ -107,47 +108,22 @@ public:
 	{
 		data.clear();
 	}
-	// 
-	// 	typename std::vector<ElementType>::iterator begin()
-	// 	{
-	// 		return data.begin();
-	// 	}
-	// 
-	// 	typename std::vector<ElementType>::iterator end()
-	// 	{
-	// 		return data.end();
-	// 	}
-	// 
-	// 	typename std::vector<ElementType>::const_iterator begin() const
-	// 	{
-	// 		return data.begin();
-	// 	}
-	// 
-	// 	typename std::vector<ElementType>::const_iterator end() const
-	// 	{
-	// 		return data.end();
-	// 	}
-
+	
 private:
 
 	vec_n_type<ElementType, numDims> data;
 	std::array<size_t, numDims> sizes;
 
-	template<typename LastIndex, typename ... Indexes>
-	auto& getData(Indexes ... indexes, LastIndex last)
+
+	template<typename Container, typename FirstIndex, typename ... Indexes>
+	auto& getData(Container& c_data, FirstIndex first, Indexes ... indexes)
 	{
-		return getData(indexes...)[last];
+		return getData(c_data[first], indexes...);
 	}
 
-	template<typename FisrtIndex, typename LastIndex>
-	auto& getData(FisrtIndex first, LastIndex last)
+	template<typename Container, typename FirstIndex>
+	auto& getData(Container& c_data, FirstIndex first)
 	{
-		return data[first][last];
-	}
-
-	template<typename LastIndex>
-	auto& getData(LastIndex last)
-	{
-		return data[last];
+		return c_data[first];
 	}
 };
